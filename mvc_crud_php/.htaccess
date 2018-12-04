@@ -1,0 +1,23 @@
+# O htaccess é um arquivo de configuração do servidor web Apache onde podemos colocar diversas configurações.
+# Com ele é possível configurar como o usuário acessará as pastas e arquivos do nosso sistema.
+# Aqui configuraremos a aplicação para receber URLs amigáveis e direcioná-las para o index.php para que possam ser tratadas.
+# No nosso desenvolvimento vamos utilizar as regras do Apache mod_rewrite para o tratamento da nossa URL amigável.
+# O módulo Apache mod_rewrite é um módulo muito poderoso e sofisticado que fornece uma maneira de fazer manipulações de URL.
+# Com isso, você pode fazer quase todos os tipos de reescrita de URL que você pode precisar.
+# No entanto, vamos utilizar apenas as configurações básicas como vemos no código a seguir:
+
+# Para que o Apache entenda iniciamos com código RewriteEngine On.
+RewriteEngine On 
+
+# Parâmetro -d verifica se é um diretório existente.
+RewriteCond %{REQUEST_FILENAME} !-d
+# Parâmetro -f verifica se é um arquivo existente.
+RewriteCond %{REQUEST_FILENAME} !-f
+# Parâmetro -l verifica se é um caminho para um link simbólico.
+RewriteCond %{REQUEST_FILENAME} !-l
+
+# Parâmetro QSA(Query String Append) indica que será possível passar parâmetros 
+# via Query String e L(Last) indica que, caso essa regra seja atendida pela URL,
+# ela encerra as demais verificações. Definimos o arquivo index.php como o principal
+# para receber a URL através da variável via GET(url).
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
