@@ -1,0 +1,101 @@
+create table usuario(
+id_usuario serial not null,
+nome_pessoa varchar(200) not null,
+email_pessoa varchar(200) not null,
+cpf_pessoa varchar(11) not null unique,
+senha_pessoa varchar(100) not null,
+tipo_pessoa varchar(2) not null,
+constraint pk_usuario primary key (id_usuario)
+);
+
+create table cliente(
+id_cliente serial not null,
+telefone_cliente varchar(50),
+sexo_cliente varchar(10) not null,
+data_nascimento_cliente date not null,
+id_usuario integer not null,
+constraint pk_cliente primary key (id_cliente),
+constraint fk_cliente_usuario foreign key (id_usuario) references usuario(id_usuario)
+);
+
+create table funcao(
+id_funcao serial not null,
+nome_funcao varchar(50) not null,
+constraint pk_funcao primary key (id_funcao)
+);
+
+create table admin(
+id_admin serial not null,
+id_usuario integer not null,
+id_funcao integer not null,
+constraint pk_admin primary key (id_admin),
+constraint fk_admin_usuario foreign key (id_usuario) references usuario(id_usuario),
+constraint fk_admin_funcao foreign key (id_funcao) references funcao(id_funcao)	
+);
+
+create table categoria(
+id_categoria serial not null,
+nome_categoria varchar(50),
+constraint pk_categoria primary key (id_categoria)
+);
+
+create table produto(
+id_produto serial not null,
+nome_produto varchar not null,
+valor_produto numeric not null,
+foto_produto varchar not null,
+id_categoria integer not null,
+constraint pk_produto primary key (id_produto),
+constraint fk_produto_categoria foreign key (id_categoria) references categoria(id_categoria)
+);
+
+create table Pedido(
+id_pedido serial not null,
+data_pedido date not null,
+id_cliente int not null,
+constraint pk_pedido primary key (id_pedido),
+constraint fk_pedido_cliente foreign key (id_cliente) references cliente(id_cliente)
+);
+
+create table item_pedido(
+id_item_pedido serial not null,
+id_pedido integer not null,
+id_produto integer not null,
+quantidade int not null,
+subtotal numeric not null,
+constraint pk_item_pedido primary key (id_item_pedido),
+constraint fk_item_pedido_pedido foreign key (id_pedido) references pedido(id_pedido),
+constraint fk_item_pedido_produto foreign key (id_produto) references produto(id_produto)
+);
+
+create table pagamento(
+id_pagamento serial not null,
+forma_pagamento varchar not null,
+constraint pk_pagamento primary key(id_pagamento)
+);
+
+create table entrega(
+id_entrega serial not null,
+cep varchar not null,
+rua varchar not null,
+bairro varchar not null,
+numero int not null,
+cidade varchar not null,
+estado varchar not null,
+status varchar not null,
+constraint pk_entrega primary key(id_entrega)
+);
+
+create table venda(
+id_venda serial not null,
+id_pedido integer not null,
+id_pagamento integer not null,
+id_entrega integer not null,
+valor_total_venda numeric not null,
+constraint pk_venda primary key(id_venda),
+constraint fk_venda_pedido foreign key(id_pedido) references pedido(id_pedido),
+constraint fk_venda_pagamento foreign key(id_pagamento) references pagamento(id_pagamento),
+constraint fk_venda_entrega foreign key(id_entrega) references entrega(id_entrega)
+);
+
+
